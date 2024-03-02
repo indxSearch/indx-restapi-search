@@ -1,0 +1,311 @@
+.content {
+    padding: 0px;
+    width: 100%;
+    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.description {
+    font-size: var(--ModuleDescriptionFontSize);
+}
+
+.link {
+    color: black;
+}
+.link:hover {
+    color: blue;
+    text-decoration: underline;
+}
+
+.content {
+    color: #000000;
+    background-color: white;
+}
+
+#searchheader {
+    display: flex;
+    height: 90px;
+}
+
+#meta {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    
+    background-image: url('/images/indxlogo.svg');
+    background-size: 35px 25px;
+    background-position: center right 25px;
+    background-repeat: no-repeat;
+
+}
+.metafields {
+    width: 100%;
+    margin: 0 auto;
+    text-align: left;
+    padding-left: 40px;
+    font-size: 12px;
+    opacity: 0.8;
+}
+.description {
+    font-family: "reg";
+    font-size: 12px;
+    width: 100%;
+    float: left;
+}
+.metainfo {
+    margin-top: 5px;
+    width: 100%;
+    float: left;
+}
+
+#searchdemo {
+    width: 100%;
+    margin-top: 0px;
+}
+
+.input {
+    margin-top: 5px;
+    margin-left: 5px;
+    width: calc(50% - 5px);
+    height: calc(100% - 10px);
+    font-family: "lig";
+    font-size: 24px;
+    border-radius: 0px;
+    background: #eee;
+    border-radius: 8px;
+    border: none;
+    padding-left: 35px;
+    color: #1e1e1e;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+    transition: background-color 0.2s;
+    caret-color: blue;
+}
+
+    .input[type="search"] {
+        -webkit-appearance: none;
+    }
+    .input:focus {
+        outline: none;
+        background: none;
+        color: var(--CB4);
+    }
+    .input::placeholder {
+        opacity: .3;
+        color: black;
+        transition: opacity 0.2s;
+        padding-left: 40px;
+        background-image: url('/images/search.svg');
+        background-size: 24px 24px;
+        background-repeat: no-repeat;
+        background-position-x: 0px;
+        background-position-y: 4px;
+    }
+    .input:focus::placeholder {
+        opacity: 0;
+    }
+    .input::selection {
+        background: var(--CB2);
+    }
+
+.ul {
+    list-style-type: none;
+    padding-left: 0px;
+    margin: 0px;
+    height: auto;
+    overflow: hidden;
+}
+
+.ul > li {
+    font-size: 20px;
+    text-transform: none;
+    height: auto;
+    padding-top: 0px;
+    padding-bottom: 20px;
+    color: #1e1e1e;
+    border-bottom: 1px solid rgba(0,0,0, 0.1);
+}
+.ul > li:hover {
+    background-color: #121215;
+    color: white;
+}
+
+.ul > li:last-child {
+    border-bottom: none;
+}
+.ul > li.lastInList {
+    border-bottom: none;
+}
+
+
+.resultinfo > div {
+   margin-bottom: 10px;
+   margin-left: 40px;
+   margin-right: 60px;
+}
+
+.resultinfo > div:last-child {
+    margin-bottom: 0px;
+}
+
+.documentKey {
+    font-size: 14px;
+    opacity: 0.5;
+    margin-left: 10px;
+}
+
+.number {
+    position: relative;
+    height: 20px;
+    width: 20px;
+    left: 20px;
+    top: 21px;
+    display: inline;
+    font-size: 12px;
+    color: black;
+    opacity: 0.5;
+}
+ul.passive {
+    height: 600px;
+    background-image: url('/images/indxlogostroke.svg');
+    background-size: 350px 250px;
+    opacity: 0.15;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.ul > li:hover > .number {
+    color: white;
+}
+.score {
+    float: right;
+    top: 27px;
+    left: -20px;
+    opacity: 0.5;
+}
+
+.cut {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+
+    #searchheader {
+        height: 70px;
+    }
+
+    #meta {
+        background-size: 35px 25px;
+    }
+
+    .input {
+        font-size: 20px;
+    }
+    .input::placeholder {
+        background-size: 20px 20px;
+        padding-left: 30px;
+    }
+
+    .ul.passive {
+        height: 600px;
+        background-size: 280px 200px;
+    }
+
+    .ul > li {
+        font-size: 16px;
+    }
+    .number {
+        top: 18px;
+    }
+    .score {
+        top: 22px;
+    }
+}
+
+@media (max-width: 936px) { /* Custom breakpoint for snapping to edge */
+    .content {
+        border-radius: 0px;
+        overflow: hidden;
+    } 
+}
+
+
+@media (max-width: 700px) {
+    #searchheader {
+        flex-direction: column-reverse;
+        height: 140px;
+    }
+    #meta {
+        width: 100%;
+    }
+    .input {
+        width: calc(100% - 10px);
+        margin-top: 0px;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 450px) {
+
+    .ul > li {
+        font-size: 14px;
+    }
+    .ul.passive {
+        height: 400px;
+        background-size: 180px 128px;
+    }
+
+}
+
+@media (prefers-color-scheme: dark) {
+    .content {
+        background-color: #121215;
+    }
+
+    .link {
+        color: white;
+    }
+    .link:hover {
+        color: #AAAAFF;
+        text-decoration: underline;
+    }
+
+    #meta {
+        background-image: url('/images/indxlogowhite.svg');
+        color: white;
+    }
+
+    .number {
+        color: white;
+    }
+
+    .input {
+        color: white;
+        background-color: rgba(255,255,255, 0.05);
+        caret-color: var(--CB2);
+    }
+        .input:focus {
+            color: #AAAAFF;
+        }
+        .input::placeholder {
+            color: white;
+            background-image: url('/images/searchdark.svg');
+        }
+        .input::selection {
+            background: var(--CB3);
+        }
+
+    ul.passive {
+        background-image: url('/images/indxlogowhite.svg');
+        opacity: 0.05;
+    }
+    .ul > li {
+        color: #EAEAFF;
+        border-bottom: 1px solid rgba(255,255,255, 0.1);
+    }
+    .ul > li:hover {
+        background-color: rgba(170,170,255, 0.05);
+    }
+
+}
