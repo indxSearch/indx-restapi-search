@@ -18,7 +18,7 @@ export default function App() {
 
           results={50}
           heap={0}
-          algorithm={13} // 13 is RR + Coverage, 0 is pure RelevancyRanking
+          algorithm={1} // 1 is Coverage, 0 is pure RelevancyRanking
           dataSet="My search demo"
           doTruncate={true} // cuts if Coverage algo detects full tokens
 

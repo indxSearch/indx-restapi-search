@@ -2,7 +2,7 @@
 
 /*
 SEARCH for RestAPI
-For V3.1 with CoverageSetup
+For V3.2 with CoverageSetup
 
 See docs.indx.co to learn more.
 Go to auth.indx.co to register for a developer account
@@ -20,7 +20,6 @@ const url = 'https://api.indx.co/api/Search'; // indx API
 
 interface SearchProps {
   results?: number;
-  merge?: boolean;
   heap?: number;
   algorithm?: number;
   firstQuery?: string;
@@ -39,7 +38,6 @@ interface SearchProps {
   lcsWordMinWordSize?: number;
   lcsWordLcsErrorTolerance?: number;
   lcsWordLcsMaxRepetitions?: number;
-  lcsWordBottomMinWordHits?: number;
   coverageMinWordHitsAbs?: number;
   coverageMinWordHitsRelative?: number;
   coverageQLimitForErrorTolerance?: number;
@@ -49,7 +47,7 @@ interface SearchProps {
 // Interfaces
 interface ApiResponse {
   searchRecords: Record[];
-  lcsBottomIndex?: number;
+  coverageBottomIndex?: number;
 }
 
 interface Record {
@@ -63,7 +61,7 @@ interface Record {
 const Search: React.FC<SearchProps> = ({
   results = 20,
   heap = 0,
-  algorithm = 0,
+  algorithm = 1,
   firstQuery = "",
   placeholderText = "Search",
   dataSet = "Undefined",
@@ -73,7 +71,7 @@ const Search: React.FC<SearchProps> = ({
   removeDuplicates = true,
 
   // COVERAGE SETUP (Default values)
-  // Only activates on algorithm 13
+  // Only activates on algorithm 1
   lcsTopErrorTolerance = 0,
   lcsTopMaxRepetions = 0,
   lcsErrorTolerance = 0,
@@ -83,7 +81,6 @@ const Search: React.FC<SearchProps> = ({
   lcsWordMinWordSize = 3,
   lcsWordLcsErrorTolerance = 0,
   lcsWordLcsMaxRepetitions = 0,
-  lcsWordBottomMinWordHits = 1,
   coverageMinWordHitsAbs = 1,
   coverageMinWordHitsRelative = 0,
   coverageQLimitForErrorTolerance = 5,
@@ -122,7 +119,6 @@ const Search: React.FC<SearchProps> = ({
             lcsWordMinWordSize: lcsWordMinWordSize,
             lcsWordLcsErrorTolerance: lcsWordLcsErrorTolerance,
             lcsWordLcsMaxRepetitions: lcsWordLcsMaxRepetitions,
-            lcsWordBottomMinWordHits: lcsWordBottomMinWordHits,
             coverageMinWordHitsAbs: coverageMinWordHitsAbs,
             coverageMinWordHitsRelative: coverageMinWordHitsRelative,
             coverageQLimitForErrorTolerance: coverageQLimitForErrorTolerance,
@@ -138,7 +134,7 @@ const Search: React.FC<SearchProps> = ({
         // Filter records where metricScore is above min threshold
         const filteredRecords = data.searchRecords.filter((record) => record.metricScore >= metricScoreMin);
         setRecords(queryText.length > 1 ? filteredRecords : data.searchRecords);
-        setTruncateIndex(doTruncate ? data.lcsBottomIndex ?? -1 : -1);
+        setTruncateIndex(doTruncate ? data.coverageBottomIndex ?? -1 : -1);
       } else {
         setRecords([]); // Reset to empty array if response is not as expected
       }
