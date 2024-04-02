@@ -4,6 +4,7 @@
     box-shadow: 80px 80px 150px 100px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
+    container-type: inline-size;
 }
 
 .description {
@@ -189,7 +190,7 @@ ul.passive {
     display: none;
 }
 
-@media (max-width: 1024px) {
+@container (max-width: 768px) {
 
     #searchheader {
         height: 70px;
@@ -223,7 +224,7 @@ ul.passive {
     }
 }
 
-@media (max-width: 936px) { /* Custom breakpoint for snapping to edge */
+@container (max-width: 936px) { /* Custom breakpoint for snapping to edge */
     .content {
         border-radius: 0px;
         overflow: hidden;
@@ -231,7 +232,7 @@ ul.passive {
 }
 
 
-@media (max-width: 700px) {
+@container (max-width: 700px) {
     #searchheader {
         flex-direction: column-reverse;
         height: 140px;
@@ -246,7 +247,7 @@ ul.passive {
     }
 }
 
-@media (max-width: 450px) {
+@container (max-width: 450px) {
 
     .ul > li {
         font-size: 14px;

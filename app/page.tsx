@@ -103,8 +103,8 @@ export default function App() {
         </div>
       </div>
 
-      <div id={styles.search}>
-        
+      <div id={styles.searchWrapper}>
+
         <Search
 
           //

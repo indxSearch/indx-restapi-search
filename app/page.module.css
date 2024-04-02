@@ -47,15 +47,30 @@
     border: 1px solid var(--CB4);
 }
 
-#search {
-    max-width: 800px;
+#searchWrapper {
+    max-width: 900px;
     padding-top: 60px;
+    padding-left: 10px; 
+    padding-right: 10px;
     padding-bottom: 40px;
     margin: 0 auto;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+@media (max-width: 600px) {
+    #auth {
+        flex-wrap: wrap;
+    }
+    #login {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    #searchWrapper {
+        padding-top: 30px;
+    }
 }
 
 @media (prefers-color-scheme: dark) {
