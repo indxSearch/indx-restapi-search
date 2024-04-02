@@ -11,24 +11,22 @@ Go to auth.indx.co to register for a developer account
 import React, { useState, useEffect } from 'react';
 import styles from './Search.module.css';
 
-//
-// Token and URL for API access (Required)
-//
-const token = "Bearer " + "INSERT YOUR TOKEN HERE";
-const url = 'https://api.indx.co/api/Search'; // indx API
-
 
 interface SearchProps {
-  results?: number;
-  heap?: number;
-  algorithm?: number;
-  firstQuery?: string;
-  placeholderText?: string;
-  dataSet?: string;
+  url?: string; // Url to API. Default https://api.indx.co/api/Search
+  token?: string; // Formatted as Bearer + token. Retrieved when logging in.
+  results?: number; // Number of results to be returned
+  heap?: string; // Heap or Dataset number. Default 0
+  algorithm?: number; // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
+  firstQuery?: string; // Use this to do a search when first loading
+  placeholderText?: string; // Placeholder for the input field
+  dataSetDesc?: string; // Description title of the dataset in use
   metricScoreMin?: number;
-  doTruncate?: boolean;
-  showMeta?: boolean;
-  removeDuplicates?: boolean;
+  doTruncate?: boolean; // Set false if you want to always show results
+  showMeta?: boolean; // Set true if you want to display information about key and segment numbers
+  removeDuplicates?: boolean; // Set false if you want to show multiple results with the same key.
+
+  // Coverage settings. Advanced settings.
   lcsTopErrorTolerance?: number;
   lcsTopMaxRepetions?: number;
   lcsErrorTolerance?: number;
@@ -59,14 +57,16 @@ interface Record {
 
 
 const Search: React.FC<SearchProps> = ({
+  url = "https://api.indx.co/api/Search",
+  token = "",
+  heap = "0",
   results = 20,
-  heap = 0,
   algorithm = 1,
   firstQuery = "",
   placeholderText = "Search",
-  dataSet = "Undefined",
-  metricScoreMin = 0,
-  doTruncate = false,
+  dataSetDesc = "Undefined",
+  metricScoreMin = 30,
+  doTruncate = true,
   showMeta = false,
   removeDuplicates = true,
 
@@ -146,9 +146,9 @@ const Search: React.FC<SearchProps> = ({
 
 
   // First query to wake API on load. This is optional
-  useEffect(() => {
-    callAPI(firstQuery);
-  }, []);
+  // useEffect(() => {
+  //   callAPI(firstQuery);
+  // }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
@@ -172,11 +172,11 @@ const Search: React.FC<SearchProps> = ({
             <div className={styles.description}>INDX SEARCH SYSTEM</div>
             {showMeta ? (
               <>
-                <div className={styles.metainfo}>Dataset: {dataSet} / Heap: {heap}</div>
+                <div className={styles.metainfo}>Dataset: {dataSetDesc} / Heap: {heap}</div>
                 <div className={styles.metainfo}>Algorithm: {algorithm}</div>
               </>
             ) : (
-              <div className={styles.metainfo}>Dataset: {dataSet}</div>
+              <div className={styles.metainfo}>Dataset: {dataSetDesc}</div>
             )}
           </div>
         </div>

@@ -1,7 +1,7 @@
 .content {
     padding: 0px;
     width: 100%;
-    box-shadow: 0px 0px 50px rgba(0, 0, 0, 0.1);
+    box-shadow: 80px 80px 150px 100px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
     overflow: hidden;
 }
@@ -261,6 +261,7 @@ ul.passive {
 @media (prefers-color-scheme: dark) {
     .content {
         background-color: #121215;
+        box-shadow: 0 0 50px rgba(0,0,0,.1);
     }
 
     .link {

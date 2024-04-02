@@ -42,6 +42,9 @@ h3 {
     html, body {
         background-color: var(--CB6);
     }
+    input, button, select, label {
+        color: white;
+      }
 }
 
 @font-face {
