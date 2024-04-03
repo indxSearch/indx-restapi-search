@@ -62,6 +62,13 @@ export default function App() {
     setPw(event.target.value);
   };
 
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    if (event.key === 'Enter') {
+      Login();
+    }
+  };
+  
+
   //
   // Settings panel
   //
@@ -125,6 +132,7 @@ export default function App() {
             placeholder="Password"
             value={pw}
             onChange={handlePwChange}
+            onKeyDown={handleKeyPress}
           />
 
           <button onClick={Login}>Login</button>
