@@ -27,6 +27,67 @@
     width: 100px;
 }
 
+#settingsPanel {
+    position: absolute;
+    right: 10px;
+    top: 60px;
+    z-index: 100;
+    background-color: rgba(255,255,255, 0.9);
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 0 50px rgba(0,0,0,.1);
+}
+
+#settingsPanel > div {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.switch input {
+    display: none;
+  }
+  
+  /* The slider (background of the switch) */
+  .switch .slider {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+    background-color: #ccc;
+    border-radius: 17px;
+    transition: 0.4s;
+  }
+  
+  /* The circle inside the slider */
+  .switch .slider::before {
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    border-radius: 50%;
+    transition: 0.2s;
+  }
+  
+  /* Change the background of the slider when the checkbox is checked */
+  .switch input:checked + .slider {
+    background-color: #4CAF50;
+  }
+  
+  /* Move the circle to the right when checked */
+  .switch input:checked + .slider::before {
+    transform: translateX(13px); /* Move the circle to the right */
+  }
+
 
 #auth input, 
 #auth button,
@@ -90,6 +151,25 @@
     #auth select:hover
     {
         border: 1px solid #666;
+    }
+
+    #settingsPanel {
+        background-color: rgba(var(--CB5-rgb), 0.9); /* Use RGBA for semi-transparent background */
+        box-shadow: 0 0 50px rgba(0,0,0,.1);
+        border: 1px solid #333;
+        backdrop-filter: blur(10px); /* Apply blur to the background */
+    }
+    
+    .switch .slider {
+    background-color: #666;
+    }
+    
+    .switch .slider::before {
+    background-color: white;
+    }
+    
+    .switch input:checked + .slider {
+    background-color: #4CAF50;
     }
 
 }

@@ -4,6 +4,7 @@ import React, { useState, ChangeEvent } from 'react';
 
 import Search from "./Search"
 import styles from './page.module.css';
+import { dot } from 'node:test/reporters';
 
 
 interface AccessToken {
@@ -18,7 +19,6 @@ export default function App() {
   const [url, setUrl] = useState<string>('https://api.indx.co/api/'); // Starting url
   const [usr, setUsr] = useState<string>(''); // Indx Auth username (e-mail)
   const [pw, setPw] = useState<string>(''); // Password
-  const [heapId, setHeapId] = useState<string>("0"); // Default to heap 0
 
   // Login to fetch API token
   const Login = async (): Promise<void> => {
@@ -62,10 +62,51 @@ export default function App() {
     setPw(event.target.value);
   };
 
-  const handleHeapChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setHeapId(event.target.value);
+  //
+  // Settings panel
+  //
+  
+  const [showSettings, setShowSettings] = useState<boolean>(false);
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  }
+
+  // General state handler for string and number states
+  const handleStringOrNumberChange = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value: T = event.target.type === 'number' ? Number(event.target.value) as unknown as T : event.target.value as unknown as T;
+      setter(value);
+    };
   };
 
+  // General state handler for boolean states
+  const handleBooleanChange = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
+    return (event: React.ChangeEvent<HTMLInputElement>) => {
+      setter(event.target.checked);
+    };
+  };
+
+  const [heapId, setHeapId] = useState<string>("0"); // Default to heap 0
+  const [resultsNum, setResultsNum] = useState<number>(30);
+  const [doTruncate, setDoTruncate] = useState<boolean>(true);
+  const [algorithm, setAlgorithm] = useState<number>(1);
+  const [showMeta, setShowMeta] = useState<boolean>(false);
+  const [metricScoreMin, setmetricScoreMin] = useState<number>(40);
+  const [removeDuplicates, setRemoveDuplicates] = useState<boolean>(true);
+  const [placeholderText, setPlaceholderText] = useState<string>("Type here to search");
+
+  const handleHeapIdChange = handleStringOrNumberChange<string>(setHeapId);
+  const handleResultsNumChange = handleStringOrNumberChange<number>(setResultsNum);
+  const handleDoTruncateChange = handleBooleanChange(setDoTruncate);
+  const handleShowMetaChange = handleBooleanChange(setShowMeta);
+  const handleMetricScoreMinChange = handleStringOrNumberChange<number>(setmetricScoreMin);
+  const handleRemoveDuplicatesChange = handleBooleanChange(setRemoveDuplicates);
+  const handlePlaceholderTextChange = handleStringOrNumberChange<string>(setPlaceholderText);
+  
+  const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setAlgorithm(event.target.checked ? 1 : 0);
+  };
+  
 
 
   return (
@@ -93,13 +134,103 @@ export default function App() {
         </div>
 
         <div id={styles.settings}>
-          DatasetID <input
-            style={{ width: '30px' }}
-            type="text"
-            placeholder="HeapID"
-            value={heapId}
-            onChange={handleHeapChange}
-          />
+        <button onClick={toggleSettings}>Query parameters</button>
+          {showSettings && (
+            <div id={styles.settingsPanel}>
+
+              <div>          
+                  DatasetID <input
+                  style={{ width: '20px' }}
+                  type="text"
+                  placeholder="ID"
+                  value={heapId}
+                  onChange={handleHeapIdChange}
+                  />
+              </div>
+
+              <div>          
+                  Number of results <input
+                  style={{ width: '20px' }}
+                  type="text"
+                  placeholder="Num"
+                  value={resultsNum}
+                  onChange={handleResultsNumChange}
+                  />
+              </div>
+
+              <div>
+                Coverage 
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={algorithm === 1}
+                    onChange={handleAlgorithmChange}
+                  />
+                  <span className={styles.slider}></span>
+                </label>
+              </div>
+
+              <div>
+                Truncate results 
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={doTruncate}
+                    onChange={handleDoTruncateChange}
+                  />
+                  <span className={styles.slider}></span>
+                </label>
+              </div>
+
+              { doTruncate && (
+                <div>          
+                    Metric Score minimum <input
+                    style={{ width: '20px' }}
+                    type="text"
+                    placeholder="Min"
+                    value={metricScoreMin}
+                    onChange={handleMetricScoreMinChange}
+                    />
+                </div>
+              )}
+
+              <div>          
+                  Placeholder <input
+                  style={{ width: '140px' }}
+                  type="text"
+                  placeholder="Text"
+                  value={placeholderText}
+                  onChange={handlePlaceholderTextChange}
+                  />
+              </div>
+
+              <div>
+                Show meta information 
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={showMeta}
+                    onChange={handleShowMetaChange}
+                  />
+                  <span className={styles.slider}></span>
+                </label>
+              </div>
+
+              <div>
+                Remove duplicates 
+                <label className={styles.switch}>
+                  <input
+                    type="checkbox"
+                    checked={removeDuplicates}
+                    onChange={handleRemoveDuplicatesChange}
+                  />
+                  <span className={styles.slider}></span>
+                </label>
+              </div>
+
+
+            </div>
+          )}
         </div>
       </div>
 
@@ -112,16 +243,15 @@ export default function App() {
           //
 
           token = {apiToken}
-          results = {30} // Number of results to be returned
+          results = {resultsNum} // Number of results to be returned
           heap = {heapId} // Heap or Dataset number. Default 0
-          algorithm = {1} // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
-          doTruncate = {true} // Set false if you want to always show results even when they are less likely to be relevant
-          // firstQuery = "" // Use this to do a search when first loading
-          placeholderText="Type here to search" // Placeholder for the input field
-          dataSetDesc = "My search demo" // Description title of the dataset in use
-          // metricScoreMin={30} // Minimum pattern score (of 255) to be accepted. Default 30. 
-          // showMeta = {false} // Set true if you want to display information about key and segment numbers
-          // removeDuplicates = {true} // Set false if you want to show multiple results with the same key.
+          algorithm = {algorithm} // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
+          doTruncate = {doTruncate} // Set false if you want to always show results even when they are less likely to be relevant
+          placeholderText = {placeholderText} // Placeholder for the input field
+          dataSetDesc = "Undefined" // Description title of the dataset in use
+          metricScoreMin = {metricScoreMin} // Minimum pattern score (of 255) to be accepted. Default 30. 
+          showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
+          removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.
 
           />
 

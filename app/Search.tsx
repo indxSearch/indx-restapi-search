@@ -18,7 +18,6 @@ interface SearchProps {
   results?: number; // Number of results to be returned
   heap?: string; // Heap or Dataset number. Default 0
   algorithm?: number; // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
-  firstQuery?: string; // Use this to do a search when first loading
   placeholderText?: string; // Placeholder for the input field
   dataSetDesc?: string; // Description title of the dataset in use
   metricScoreMin?: number;
@@ -62,7 +61,6 @@ const Search: React.FC<SearchProps> = ({
   heap = "0",
   results = 20,
   algorithm = 1,
-  firstQuery = "",
   placeholderText = "Search",
   dataSetDesc = "Undefined",
   metricScoreMin = 30,
@@ -87,7 +85,7 @@ const Search: React.FC<SearchProps> = ({
   coverageLcsErrorToleranceRelativeq = 0.2
 }) => {
   const [records, setRecords] = useState<Record[]>([]);
-  const [searchText, setSearchText] = useState<string>(firstQuery);
+  const [searchText, setSearchText] = useState<string>("");
   const [truncateIndex, setTruncateIndex] = useState<number>(-1);
 
   const callAPI = async (queryText: string) => {
@@ -143,12 +141,6 @@ const Search: React.FC<SearchProps> = ({
       setRecords([]); // Reset to empty array in case of error
     }
   };
-
-
-  // First query to wake API on load. This is optional
-  // useEffect(() => {
-  //   callAPI(firstQuery);
-  // }, []);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;
