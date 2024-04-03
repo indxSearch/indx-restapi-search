@@ -14,7 +14,7 @@ interface AccessToken {
 
 export default function App() {
 
-  const [apiToken, setapiToken] = useState<string>("");
+  const [apiToken, setApiToken] = useState<string>("");
   const [loginStatus, setLoginStatus] = useState<string>("Not logged in");
   const [url, setUrl] = useState<string>('https://api.indx.co/api/'); // Starting url
   const [usr, setUsr] = useState<string>(''); // Indx Auth username (e-mail)
@@ -35,20 +35,20 @@ export default function App() {
         // Unauthorized
         console.error("Login failed: Unauthorized");
         setLoginStatus("Unauthorized. Check credentials");
-        setapiToken(""); // Clear token on failure
+        setApiToken(""); // Clear token on failure
       } else if (response.status === 400) {
-        setapiToken("");
+        setApiToken("");
         setLoginStatus("Bad request");
       }
       else {
         const data: AccessToken = await response.json();
         console.log("Bearer " + data.token);
-        setapiToken("Bearer " + data.token);
+        setApiToken("Bearer " + data.token);
         setLoginStatus("Authorized");
       }
     } catch (error) {
       console.error("Error during login", error);
-      setapiToken(""); // Clear token on error
+      setApiToken(""); // Clear token on error
     }
   };
 
