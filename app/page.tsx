@@ -16,6 +16,7 @@ export default function App() {
 
   const [apiToken, setApiToken] = useState<string>("");
   const [loginStatus, setLoginStatus] = useState<string>("Not logged in");
+  const [isLoggedin, setIsLoggedin] = useState<boolean>(false);
   const [url, setUrl] = useState<string>('https://api.indx.co/api/'); // Starting url
   const [usr, setUsr] = useState<string>(''); // Indx Auth username (e-mail)
   const [pw, setPw] = useState<string>(''); // Password
@@ -44,7 +45,8 @@ export default function App() {
         const data: AccessToken = await response.json();
         console.log("Bearer " + data.token);
         setApiToken("Bearer " + data.token);
-        setLoginStatus("Authorized");
+        setLoginStatus("Authorized as " + usr);
+        setIsLoggedin(true);
       }
     } catch (error) {
       console.error("Error during login", error);
@@ -62,11 +64,19 @@ export default function App() {
     setPw(event.target.value);
   };
 
-  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+  const handleLoginKeyPress = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     if (event.key === 'Enter') {
       Login();
     }
   };
+
+  const LogOut = async (): Promise<void> => {
+    setUsr("");
+    setPw("");
+    setApiToken("");
+    setLoginStatus("Not logged in");
+    setIsLoggedin(false);
+  }
   
 
   //
@@ -121,6 +131,9 @@ export default function App() {
 
       <div id={styles.auth}>
         <div id={styles.login}>
+
+          {!isLoggedin ? (
+          <>
           <input
             type="text"
             placeholder="Username"
@@ -132,10 +145,14 @@ export default function App() {
             placeholder="Password"
             value={pw}
             onChange={handlePwChange}
-            onKeyDown={handleKeyPress}
+            onKeyDown={handleLoginKeyPress}
           />
 
-          <button onClick={Login}>Login</button>
+          <button onClick={Login}>Log in</button>
+          </>
+          ) : (
+            <button onClick={LogOut}>Log out</button>
+          )}
 
           <p className={styles.loginStatus}> {loginStatus} </p>
 
