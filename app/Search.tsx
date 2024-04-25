@@ -90,7 +90,7 @@ const Search: React.FC<SearchProps> = ({
 
   const callAPI = async (queryText: string) => {
     try {
-      const response = await fetch(`${url}/${heap}`, {
+      const response = await fetch(`${url}Search/${heap}`, {
         cache: "no-cache",
         method: 'POST',
         headers: {
@@ -166,6 +166,7 @@ const Search: React.FC<SearchProps> = ({
               <>
                 <div className={styles.metainfo}>Dataset: {dataSetDesc} / Heap: {heap}</div>
                 <div className={styles.metainfo}>Algorithm: {algorithm}</div>
+                <div className={styles.metainfo}>Url: {url}</div>
               </>
             ) : (
               <div className={styles.metainfo}>Dataset: {dataSetDesc}</div>

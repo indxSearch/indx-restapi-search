@@ -1,10 +1,9 @@
 'use client'
 
-import React, { useState, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Search from "./Search"
 import styles from './page.module.css';
-import { dot } from 'node:test/reporters';
 
 
 interface AccessToken {
@@ -123,6 +122,15 @@ export default function App() {
   const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAlgorithm(event.target.checked ? 1 : 0);
   };
+
+  // Initial URL setup based on query parameters
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const initialUrl = queryParams.get('url');
+    if (initialUrl) {
+      setUrl(initialUrl); // Set URL from query parameters
+    }
+  }, []);
   
 
 
@@ -266,7 +274,7 @@ export default function App() {
           //
           // INDX SEARCH COMPONENT PROPS
           //
-
+          url = {url}
           token = {apiToken}
           results = {resultsNum} // Number of results to be returned
           heap = {heapId} // Heap or Dataset number. Default 0
