@@ -76,7 +76,7 @@ const Search: React.FC<SearchProps> = ({
   lcsMaxRepetitions = 0,
   lcsBottomErrorTolerance = 0,
   lcsBottomMaxRepetitions = 0,
-  lcsWordMinWordSize = 3,
+  lcsWordMinWordSize = 2,
   lcsWordLcsErrorTolerance = 0,
   lcsWordLcsMaxRepetitions = 0,
   coverageMinWordHitsAbs = 1,
@@ -122,7 +122,7 @@ const Search: React.FC<SearchProps> = ({
             coverageQLimitForErrorTolerance: coverageQLimitForErrorTolerance,
             coverageLcsErrorToleranceRelativeq: coverageLcsErrorToleranceRelativeq,
           },
-          numberOfRecordsForAppliedAlgorithm: 500,
+          numberOfRecordsForAppliedAlgorithm: 1000,
         }),
       });
 

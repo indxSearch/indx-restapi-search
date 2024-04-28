@@ -285,7 +285,6 @@ export default function App() {
           metricScoreMin = {metricScoreMin} // Minimum pattern score (of 255) to be accepted. Default 30. 
           showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
           removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.
-
           />
 
       </div>
