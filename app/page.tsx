@@ -110,6 +110,7 @@ export default function App() {
   const [metricScoreMin, setmetricScoreMin] = useState<number>(40);
   const [removeDuplicates, setRemoveDuplicates] = useState<boolean>(true);
   const [placeholderText, setPlaceholderText] = useState<string>("Type here to search");
+  const [minWordSize, setMinWordSize] = useState<number>(2);
 
   const handleHeapIdChange = handleStringOrNumberChange<string>(setHeapId);
   const handleResultsNumChange = handleStringOrNumberChange<number>(setResultsNum);
@@ -118,6 +119,7 @@ export default function App() {
   const handleMetricScoreMinChange = handleStringOrNumberChange<number>(setmetricScoreMin);
   const handleRemoveDuplicatesChange = handleBooleanChange(setRemoveDuplicates);
   const handlePlaceholderTextChange = handleStringOrNumberChange<string>(setPlaceholderText);
+  const handleMinWordSizeChange = handleStringOrNumberChange<number>(setMinWordSize);
   
   const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAlgorithm(event.target.checked ? 1 : 0);
@@ -203,6 +205,18 @@ export default function App() {
                 </label>
               </div>
 
+              { algorithm === 1 && (
+                <div>          
+                  Minimum word size <input
+                  style={{ width: '20px' }}
+                  type="text"
+                  placeholder="Min"
+                  value={minWordSize}
+                  onChange={handleMinWordSizeChange}
+                  />
+                </div>
+              )}
+
               <div>
                 Truncate results 
                 <label className={styles.switch}>
@@ -217,13 +231,13 @@ export default function App() {
 
               { doTruncate && (
                 <div>          
-                    Metric Score minimum <input
-                    style={{ width: '20px' }}
-                    type="text"
-                    placeholder="Min"
-                    value={metricScoreMin}
-                    onChange={handleMetricScoreMinChange}
-                    />
+                  Metric Score minimum <input
+                  style={{ width: '20px' }}
+                  type="text"
+                  placeholder="Min"
+                  value={metricScoreMin}
+                  onChange={handleMetricScoreMinChange}
+                  />
                 </div>
               )}
 
@@ -285,6 +299,7 @@ export default function App() {
           metricScoreMin = {metricScoreMin} // Minimum pattern score (of 255) to be accepted. Default 30. 
           showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
           removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.
+          lcsWordMinWordSize= {minWordSize} // Minimum word to be covered
           />
 
       </div>
