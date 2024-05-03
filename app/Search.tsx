@@ -13,7 +13,7 @@ import styles from './Search.module.css';
 
 
 interface SearchProps {
-  url?: string; // Url to API. Default https://api.indx.co/api/Search
+  url?: string; // Url to API. Default https://api.indx.co/api/
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
   heap?: string; // Heap or Dataset number. Default 0
@@ -56,7 +56,7 @@ interface Record {
 
 
 const Search: React.FC<SearchProps> = ({
-  url = "https://api.indx.co/api/Search",
+  url = "https://api.indx.co/api/",
   token = "",
   heap = "0",
   results = 20,
