@@ -249,7 +249,7 @@ export default function App() {
               { applyCoverage && (
                 <div id={styles.coverageSetup}>
                   <div>
-                    <button onClick={toggleCoverageSetup}>{!showCoverageSetup ? "Show Coverage Setup" : "Hide Coverage Setup"}</button>
+                    <button onClick={toggleCoverageSetup}>{!showCoverageSetup ? "Show Coverage Setup ►" : "Hide Coverage Setup ▼"}</button>
                   </div>
                   { showCoverageSetup && (
                   <div>
