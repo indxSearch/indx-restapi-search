@@ -16,8 +16,9 @@ interface SearchProps {
   url?: string; // Url to API. Default https://api.indx.co/api/
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
-  heap?: string; // Heap or Dataset number. Default 0
+  dataset?: string; // Dataset name
   algorithm?: number; // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
+  applyCoverageMetric: boolean;
   placeholderText?: string; // Placeholder for the input field
   dataSetDesc?: string; // Description title of the dataset in use
   metricScoreMin?: number;
@@ -58,9 +59,10 @@ interface Record {
 const Search: React.FC<SearchProps> = ({
   url = "https://api.indx.co/api/",
   token = "",
-  heap = "0",
+  dataset = "0",
   results = 20,
   algorithm = 1,
+  applyCoverageMetric = true,
   placeholderText = "Search",
   dataSetDesc = "Undefined",
   metricScoreMin = 30,
@@ -90,7 +92,7 @@ const Search: React.FC<SearchProps> = ({
 
   const callAPI = async (queryText: string) => {
     try {
-      const response = await fetch(`${url}Search/${heap}`, {
+      const response = await fetch(`${url}Search/${dataset}`, {
         cache: "no-cache",
         method: 'POST',
         headers: {
@@ -99,7 +101,8 @@ const Search: React.FC<SearchProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          algorithm: algorithm,
+          // algorithm: algorithm,
+          applyCoverageMetric: applyCoverageMetric,
           keyExcludeFilter: null,
           keyIncludeFilter: null,
           logPrefix: "",
@@ -164,12 +167,11 @@ const Search: React.FC<SearchProps> = ({
             <div className={styles.description}>INDX SEARCH SYSTEM</div>
             {showMeta ? (
               <>
-                <div className={styles.metainfo}>Dataset: {dataSetDesc} / Heap: {heap}</div>
                 <div className={styles.metainfo}>Algorithm: {algorithm}</div>
                 <div className={styles.metainfo}>Url: {url}</div>
               </>
             ) : (
-              <div className={styles.metainfo}>Dataset: {dataSetDesc}</div>
+              <div className={styles.metainfo}>Dataset: {dataset}</div>
             )}
           </div>
         </div>

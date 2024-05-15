@@ -11,6 +11,10 @@ interface AccessToken {
   [key: string]: any; // Extend this to fit the actual API response
 }
 
+interface DatasetInfo {
+  [dataset: string]: any;
+}
+
 export default function App() {
 
   const [apiToken, setApiToken] = useState<string>("");
@@ -19,6 +23,7 @@ export default function App() {
   const [url, setUrl] = useState<string>('https://api.indx.co/api/'); // Starting url
   const [usr, setUsr] = useState<string>(''); // Indx Auth username (e-mail)
   const [pw, setPw] = useState<string>(''); // Password
+  const [datasetInfo, setDatasetInfo] = useState<DatasetInfo>([]);
 
   // Login to fetch API token
   const Login = async (): Promise<void> => {
@@ -46,10 +51,40 @@ export default function App() {
         setApiToken("Bearer " + data.token);
         setLoginStatus("Authorized as " + usr);
         setIsLoggedin(true);
+        GetDatasets('Bearer ' + data.token);
       }
     } catch (error) {
       console.error("Error during login", error);
       setApiToken(""); // Clear token on error
+    }
+  };
+
+  // Retrieve existing datasets
+  const GetDatasets = async (token: string): Promise<void> => {
+    try {
+      const response = await fetch(`${url}Search/datasets`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'text/plain',
+          'Authorization': token,
+        },
+      });
+
+      if (response.status === 401) {
+        // Unauthorized
+        console.error('Unauthorized access to datasets');
+        setDatasetInfo([]);
+      } else {
+        const data = await response.json();
+        if (data) {
+          setDatasetInfo(data);
+        } else {
+          setDatasetInfo([]);
+        }
+      }
+    } catch (error) {
+      console.error('Error getting dataset info', error);
+      setDatasetInfo([]);
     }
   };
 
@@ -75,6 +110,7 @@ export default function App() {
     setApiToken("");
     setLoginStatus("Not logged in");
     setIsLoggedin(false);
+    setDatasetInfo([]);
   }
   
 
@@ -95,35 +131,20 @@ export default function App() {
     };
   };
 
-  // General state handler for boolean states
-  const handleBooleanChange = (setter: React.Dispatch<React.SetStateAction<boolean>>) => {
-    return (event: React.ChangeEvent<HTMLInputElement>) => {
-      setter(event.target.checked);
-    };
-  };
-
-  const [heapId, setHeapId] = useState<string>("0"); // Default to heap 0
+  const [dataset, setDataset] = useState<string>("test");
   const [resultsNum, setResultsNum] = useState<number>(30);
   const [doTruncate, setDoTruncate] = useState<boolean>(true);
-  const [algorithm, setAlgorithm] = useState<number>(1);
+  const [applyCoverage, setApplyCoverage] = useState<boolean>(true);
   const [showMeta, setShowMeta] = useState<boolean>(false);
   const [metricScoreMin, setmetricScoreMin] = useState<number>(40);
   const [removeDuplicates, setRemoveDuplicates] = useState<boolean>(true);
   const [placeholderText, setPlaceholderText] = useState<string>("Type here to search");
   const [minWordSize, setMinWordSize] = useState<number>(2);
 
-  const handleHeapIdChange = handleStringOrNumberChange<string>(setHeapId);
   const handleResultsNumChange = handleStringOrNumberChange<number>(setResultsNum);
-  const handleDoTruncateChange = handleBooleanChange(setDoTruncate);
-  const handleShowMetaChange = handleBooleanChange(setShowMeta);
   const handleMetricScoreMinChange = handleStringOrNumberChange<number>(setmetricScoreMin);
-  const handleRemoveDuplicatesChange = handleBooleanChange(setRemoveDuplicates);
   const handlePlaceholderTextChange = handleStringOrNumberChange<string>(setPlaceholderText);
   const handleMinWordSizeChange = handleStringOrNumberChange<number>(setMinWordSize);
-  
-  const handleAlgorithmChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAlgorithm(event.target.checked ? 1 : 0);
-  };
 
   // Initial URL setup based on query parameters
   useEffect(() => {
@@ -174,13 +195,19 @@ export default function App() {
             <div id={styles.settingsPanel}>
 
               <div>          
-                  DatasetID <input
-                  style={{ width: '20px' }}
-                  type="text"
-                  placeholder="ID"
-                  value={heapId}
-                  onChange={handleHeapIdChange}
-                  />
+              Dataset
+                <select
+                  style={{ width: '150px' }}
+                  value={dataset}
+                  onChange={(event) => setDataset(event.target.value)}
+                >
+                  <option value="" disabled>Select a dataset</option>
+                  {datasetInfo.map((ds: any, index: number) => (
+                    <option key={index} value={ds}>
+                      {ds !== null && ds !== undefined ? ds.toString() : 'N/A'}
+                    </option>
+                  ))}
+                </select>
               </div>
 
               <div>          
@@ -198,14 +225,14 @@ export default function App() {
                 <label className={styles.switch}>
                   <input
                     type="checkbox"
-                    checked={algorithm === 1}
-                    onChange={handleAlgorithmChange}
+                    checked={applyCoverage}
+                    onChange={(event) => setApplyCoverage(event.target.checked)}
                   />
                   <span className={styles.slider}></span>
                 </label>
               </div>
 
-              { algorithm === 1 && (
+              { applyCoverage && (
                 <div>          
                   Minimum word size <input
                   style={{ width: '20px' }}
@@ -223,7 +250,7 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={doTruncate}
-                    onChange={handleDoTruncateChange}
+                    onChange={(event) => setDoTruncate(event.target.checked)}
                   />
                   <span className={styles.slider}></span>
                 </label>
@@ -257,7 +284,7 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={showMeta}
-                    onChange={handleShowMetaChange}
+                    onChange={(event) => setShowMeta(event.target.checked)}
                   />
                   <span className={styles.slider}></span>
                 </label>
@@ -269,7 +296,7 @@ export default function App() {
                   <input
                     type="checkbox"
                     checked={removeDuplicates}
-                    onChange={handleRemoveDuplicatesChange}
+                    onChange={(event) => setRemoveDuplicates(event.target.checked)}
                   />
                   <span className={styles.slider}></span>
                 </label>
@@ -281,7 +308,7 @@ export default function App() {
         </div>
       </div>
 
-      <div id={styles.searchWrapper}>
+      <div id={styles.searchWrapper} className={`${!isLoggedin ? styles.unauthorized : ''}`}>
 
         <Search
 
@@ -291,11 +318,11 @@ export default function App() {
           url = {url}
           token = {apiToken}
           results = {resultsNum} // Number of results to be returned
-          heap = {heapId} // Heap or Dataset number. Default 0
-          algorithm = {algorithm} // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
+          dataset = {dataset} // Dataset name
+          applyCoverageMetric = {applyCoverage} // Coverage function that detects whole, concatenated or incomplete words.
           doTruncate = {doTruncate} // Set false if you want to always show results even when they are less likely to be relevant
           placeholderText = {placeholderText} // Placeholder for the input field
-          dataSetDesc = "Undefined" // Description title of the dataset in use
+          dataSetDesc = {dataset} // Description title of the dataset in use
           metricScoreMin = {metricScoreMin} // Minimum pattern score (of 255) to be accepted. Default 30. 
           showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
           removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.

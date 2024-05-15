@@ -121,6 +121,11 @@
     justify-content: center;
 }
 
+.unauthorized {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
 @media (max-width: 600px) {
     #auth {
         flex-wrap: wrap;
