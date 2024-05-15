@@ -44,11 +44,22 @@
     box-shadow: 0 0 50px rgba(0,0,0,.1);
 }
 
-#settingsPanel > div {
+#settingsPanel > div,
+#coverageSetup > div > div {
     display: flex;
     align-items: center;
     gap: 10px;
 }
+
+#coverageSetup,
+#coverageSetup > div {
+    width: 100%;
+    align-items: end !important;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 
 .switch input {
     display: none;
@@ -63,6 +74,7 @@
     background-color: #ccc;
     border-radius: 17px;
     transition: 0.4s;
+    margin-top: 4px;
   }
   
   /* The circle inside the slider */

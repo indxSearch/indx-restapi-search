@@ -76,8 +76,9 @@ export default function App() {
         setDatasetInfo([]);
       } else {
         const data = await response.json();
-        if (data) {
+        if (data && data.length > 0) {
           setDatasetInfo(data);
+          setDataset(data[0]);
         } else {
           setDatasetInfo([]);
         }
@@ -123,6 +124,11 @@ export default function App() {
     setShowSettings(!showSettings);
   }
 
+  const [showCoverageSetup, setShowCoverageSetup] = useState<boolean>(false);
+  const toggleCoverageSetup = () => {
+    setShowCoverageSetup(!showCoverageSetup);
+  }
+
   // General state handler for string and number states
   const handleStringOrNumberChange = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => {
     return (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -131,7 +137,7 @@ export default function App() {
     };
   };
 
-  const [dataset, setDataset] = useState<string>("test");
+  const [dataset, setDataset] = useState<string>("undefined");
   const [resultsNum, setResultsNum] = useState<number>(30);
   const [doTruncate, setDoTruncate] = useState<boolean>(true);
   const [applyCoverage, setApplyCoverage] = useState<boolean>(true);
@@ -140,6 +146,11 @@ export default function App() {
   const [removeDuplicates, setRemoveDuplicates] = useState<boolean>(true);
   const [placeholderText, setPlaceholderText] = useState<string>("Type here to search");
   const [minWordSize, setMinWordSize] = useState<number>(2);
+  const [coverWholeQuery, setcoverWholeQuery] = useState<boolean>(true);
+  const [coverWholeWords, setcoverWholeWords] = useState<boolean>(true);
+  const [coverFuzzyWords, setcoverFuzzyWords] = useState<boolean>(true);
+  const [coverJoinedWords, setcoverJoinedWords] = useState<boolean>(true);
+  const [coverPrefixSuffix, setcoverPrefixSuffix] = useState<boolean>(true);
 
   const handleResultsNumChange = handleStringOrNumberChange<number>(setResultsNum);
   const handleMetricScoreMinChange = handleStringOrNumberChange<number>(setmetricScoreMin);
@@ -232,15 +243,89 @@ export default function App() {
                 </label>
               </div>
 
+              
+              
+
               { applyCoverage && (
-                <div>          
-                  Minimum word size <input
-                  style={{ width: '20px' }}
-                  type="text"
-                  placeholder="Min"
-                  value={minWordSize}
-                  onChange={handleMinWordSizeChange}
-                  />
+                <div id={styles.coverageSetup}>
+                  <div>
+                    <button onClick={toggleCoverageSetup}>{!showCoverageSetup ? "Show Coverage Setup" : "Hide Coverage Setup"}</button>
+                  </div>
+                  { showCoverageSetup && (
+                  <div>
+
+                    <div>   
+                      Minimum word size <input
+                      style={{ width: '20px' }}
+                      type="text"
+                      placeholder="Min"
+                      value={minWordSize}
+                      onChange={handleMinWordSizeChange}
+                      />
+                    </div>
+
+                    <div>
+                      Whole query 
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={coverWholeQuery}
+                          onChange={(event) => setcoverWholeQuery(event.target.checked)}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
+
+                    <div>
+                      Whole words
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={coverWholeWords}
+                          onChange={(event) => setcoverWholeWords(event.target.checked)}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
+
+                    <div>
+                      Fuzzy words
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={coverFuzzyWords}
+                          onChange={(event) => setcoverFuzzyWords(event.target.checked)}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
+
+                    <div>
+                      Joined words
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={coverJoinedWords}
+                          onChange={(event) => setcoverJoinedWords(event.target.checked)}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
+
+                    <div>
+                      Prefix and suffix
+                      <label className={styles.switch}>
+                        <input
+                          type="checkbox"
+                          checked={coverPrefixSuffix}
+                          onChange={(event) => setcoverPrefixSuffix(event.target.checked)}
+                        />
+                        <span className={styles.slider}></span>
+                      </label>
+                    </div>
+
+                  </div>
+                  )}
                 </div>
               )}
 
@@ -326,7 +411,13 @@ export default function App() {
           metricScoreMin = {metricScoreMin} // Minimum pattern score (of 255) to be accepted. Default 30. 
           showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
           removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.
+          // CoverageSetup
           lcsWordMinWordSize= {minWordSize} // Minimum word to be covered
+          coverWholeQuery = {coverWholeQuery} // Look for whole string query
+          coverWholeWords = {coverWholeWords} // Cover whole isolated words
+          coverFuzzyWords = {coverFuzzyWords} // Cover isolated words with a typo
+          coverJoinedWords = {coverJoinedWords} // Cover words that are split (works both ways)
+          coverPrefixSuffix = {coverPrefixSuffix} // Cover prefix and suffix words
           />
 
       </div>

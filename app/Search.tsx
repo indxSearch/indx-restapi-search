@@ -2,7 +2,7 @@
 
 /*
 SEARCH for RestAPI
-For V3.2 with CoverageSetup
+For V3.3 with updated API
 
 See docs.indx.co to learn more.
 Go to auth.indx.co to register for a developer account
@@ -17,8 +17,7 @@ interface SearchProps {
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
   dataset?: string; // Dataset name
-  algorithm?: number; // 0 or 1. 1 is default with the new Cover function that detects whole, concatenated or incomplete words.
-  applyCoverageMetric: boolean;
+  applyCoverageMetric: boolean; // Cover function that detects whole, concatenated or incomplete words.
   placeholderText?: string; // Placeholder for the input field
   dataSetDesc?: string; // Description title of the dataset in use
   metricScoreMin?: number;
@@ -27,19 +26,20 @@ interface SearchProps {
   removeDuplicates?: boolean; // Set false if you want to show multiple results with the same key.
 
   // Coverage settings. Advanced settings.
-  lcsTopErrorTolerance?: number;
-  lcsTopMaxRepetions?: number;
-  lcsErrorTolerance?: number;
-  lcsMaxRepetitions?: number;
-  lcsBottomErrorTolerance?: number;
-  lcsBottomMaxRepetitions?: number;
+  levenshteinMaxWordSize?: number;
   lcsWordMinWordSize?: number;
-  lcsWordLcsErrorTolerance?: number;
-  lcsWordLcsMaxRepetitions?: number;
   coverageMinWordHitsAbs?: number;
   coverageMinWordHitsRelative?: number;
   coverageQLimitForErrorTolerance?: number;
   coverageLcsErrorToleranceRelativeq?: number;
+  coverWholeQuery?: boolean;
+  coverWholeWords?: boolean;
+  coverFuzzyWords?: boolean;
+  coverJoinedWords?: boolean;
+  coverPrefixSuffix?: boolean;
+  minTruncationMatch?: number;
+  truncationStrictness?: number;
+
 }
 
 // Interfaces
@@ -59,32 +59,31 @@ interface Record {
 const Search: React.FC<SearchProps> = ({
   url = "https://api.indx.co/api/",
   token = "",
-  dataset = "0",
+  dataset = "undefined",
   results = 20,
-  algorithm = 1,
   applyCoverageMetric = true,
   placeholderText = "Search",
-  dataSetDesc = "Undefined",
   metricScoreMin = 30,
   doTruncate = true,
   showMeta = false,
   removeDuplicates = true,
 
   // COVERAGE SETUP (Default values)
-  // Only activates on algorithm 1
-  lcsTopErrorTolerance = 0,
-  lcsTopMaxRepetions = 0,
-  lcsErrorTolerance = 0,
-  lcsMaxRepetitions = 0,
-  lcsBottomErrorTolerance = 0,
-  lcsBottomMaxRepetitions = 0,
+  // Only activates with ApplyCoverage true
+  levenshteinMaxWordSize = 20,
   lcsWordMinWordSize = 2,
-  lcsWordLcsErrorTolerance = 0,
-  lcsWordLcsMaxRepetitions = 0,
   coverageMinWordHitsAbs = 1,
   coverageMinWordHitsRelative = 0,
   coverageQLimitForErrorTolerance = 5,
-  coverageLcsErrorToleranceRelativeq = 0.2
+  coverageLcsErrorToleranceRelativeq = 0.2,
+  coverWholeQuery = true,
+  coverWholeWords = true,
+  coverFuzzyWords = true,
+  coverJoinedWords = true,
+  coverPrefixSuffix = true,
+  minTruncationMatch = 3,
+  truncationStrictness = 1
+
 }) => {
   const [records, setRecords] = useState<Record[]>([]);
   const [searchText, setSearchText] = useState<string>("");
@@ -101,31 +100,30 @@ const Search: React.FC<SearchProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          // algorithm: algorithm,
           applyCoverageMetric: applyCoverageMetric,
           keyExcludeFilter: null,
           keyIncludeFilter: null,
           logPrefix: "",
           maxNumberOfRecordsToReturn: results,
           removeDuplicates: removeDuplicates,
-          soughtText: queryText,
+          queryText: queryText,
           timeOutLimitMilliseconds: 1000, //timeout after 1s
           coverageSetup: {
-            lcsTopErrorTolerance: lcsTopErrorTolerance,
-            lcsTopMaxRepetions: lcsTopMaxRepetions,
-            lcsErrorTolerance: lcsErrorTolerance,
-            lcsMaxRepetitions: lcsMaxRepetitions,
-            lcsBottomErrorTolerance: lcsBottomErrorTolerance,
-            lcsBottomMaxRepetitions: lcsBottomMaxRepetitions,
+            levenshteinMaxWordSize: levenshteinMaxWordSize,
             lcsWordMinWordSize: lcsWordMinWordSize,
-            lcsWordLcsErrorTolerance: lcsWordLcsErrorTolerance,
-            lcsWordLcsMaxRepetitions: lcsWordLcsMaxRepetitions,
             coverageMinWordHitsAbs: coverageMinWordHitsAbs,
             coverageMinWordHitsRelative: coverageMinWordHitsRelative,
             coverageQLimitForErrorTolerance: coverageQLimitForErrorTolerance,
             coverageLcsErrorToleranceRelativeq: coverageLcsErrorToleranceRelativeq,
+            coverWholeQuery: coverWholeQuery,
+            coverWholeWords: coverWholeWords,
+            coverFuzzyWords: coverFuzzyWords,
+            coverJoinedWords: coverJoinedWords,
+            coverPrefixSuffix: coverPrefixSuffix,
+            minTruncationMatch: minTruncationMatch,
+            truncationStrictness: truncationStrictness
           },
-          numberOfRecordsForAppliedAlgorithm: 1000,
+          numberOfRecordsForAppliedAlgorithm: 500,
         }),
       });
 
@@ -167,7 +165,6 @@ const Search: React.FC<SearchProps> = ({
             <div className={styles.description}>INDX SEARCH SYSTEM</div>
             {showMeta ? (
               <>
-                <div className={styles.metainfo}>Algorithm: {algorithm}</div>
                 <div className={styles.metainfo}>Url: {url}</div>
               </>
             ) : (
