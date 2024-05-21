@@ -17,7 +17,7 @@ interface SearchProps {
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
   dataset?: string; // Dataset name
-  applyCoverageMetric: boolean; // Cover function that detects whole, concatenated or incomplete words.
+  applyCoverage: boolean; // Cover function that detects whole, concatenated or incomplete words.
   placeholderText?: string; // Placeholder for the input field
   dataSetDesc?: string; // Description title of the dataset in use
   metricScoreMin?: number;
@@ -27,7 +27,7 @@ interface SearchProps {
 
   // Coverage settings. Advanced settings.
   levenshteinMaxWordSize?: number;
-  lcsWordMinWordSize?: number;
+  MinWordSize?: number;
   coverageMinWordHitsAbs?: number;
   coverageMinWordHitsRelative?: number;
   coverageQLimitForErrorTolerance?: number;
@@ -61,7 +61,7 @@ const Search: React.FC<SearchProps> = ({
   token = "",
   dataset = "undefined",
   results = 20,
-  applyCoverageMetric = true,
+  applyCoverage = true,
   placeholderText = "Search",
   metricScoreMin = 30,
   doTruncate = true,
@@ -69,9 +69,9 @@ const Search: React.FC<SearchProps> = ({
   removeDuplicates = true,
 
   // COVERAGE SETUP (Default values)
-  // Only activates with ApplyCoverage true
+  // Only activates with applyCoverage true
   levenshteinMaxWordSize = 20,
-  lcsWordMinWordSize = 2,
+  MinWordSize = 2,
   coverageMinWordHitsAbs = 1,
   coverageMinWordHitsRelative = 0,
   coverageQLimitForErrorTolerance = 5,
@@ -100,7 +100,7 @@ const Search: React.FC<SearchProps> = ({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          applyCoverageMetric: applyCoverageMetric,
+          applyCoverage: applyCoverage,
           keyExcludeFilter: null,
           keyIncludeFilter: null,
           logPrefix: "",
@@ -110,7 +110,7 @@ const Search: React.FC<SearchProps> = ({
           timeOutLimitMilliseconds: 1000, //timeout after 1s
           coverageSetup: {
             levenshteinMaxWordSize: levenshteinMaxWordSize,
-            lcsWordMinWordSize: lcsWordMinWordSize,
+            MinWordSize: MinWordSize,
             coverageMinWordHitsAbs: coverageMinWordHitsAbs,
             coverageMinWordHitsRelative: coverageMinWordHitsRelative,
             coverageQLimitForErrorTolerance: coverageQLimitForErrorTolerance,
@@ -163,13 +163,8 @@ const Search: React.FC<SearchProps> = ({
         <div id={styles.meta}>
           <div className={styles.metafields}>
             <div className={styles.description}>INDX SEARCH SYSTEM</div>
-            {showMeta ? (
-              <>
-                <div className={styles.metainfo}>Url: {url}</div>
-              </>
-            ) : (
-              <div className={styles.metainfo}>Dataset: {dataset}</div>
-            )}
+            {showMeta && (<div className={styles.metainfo}>Url: {url}</div>)}
+            <div className={styles.metainfo}>Dataset: {dataset}</div>
           </div>
         </div>
       </div>

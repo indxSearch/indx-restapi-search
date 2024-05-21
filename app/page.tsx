@@ -140,7 +140,7 @@ export default function App() {
   const [dataset, setDataset] = useState<string>("undefined");
   const [resultsNum, setResultsNum] = useState<number>(30);
   const [doTruncate, setDoTruncate] = useState<boolean>(true);
-  const [applyCoverage, setApplyCoverage] = useState<boolean>(true);
+  const [coverage, setcoverage] = useState<boolean>(true);
   const [showMeta, setShowMeta] = useState<boolean>(false);
   const [metricScoreMin, setmetricScoreMin] = useState<number>(40);
   const [removeDuplicates, setRemoveDuplicates] = useState<boolean>(true);
@@ -236,8 +236,8 @@ export default function App() {
                 <label className={styles.switch}>
                   <input
                     type="checkbox"
-                    checked={applyCoverage}
-                    onChange={(event) => setApplyCoverage(event.target.checked)}
+                    checked={coverage}
+                    onChange={(event) => setcoverage(event.target.checked)}
                   />
                   <span className={styles.slider}></span>
                 </label>
@@ -246,7 +246,7 @@ export default function App() {
               
               
 
-              { applyCoverage && (
+              { coverage && (
                 <div id={styles.coverageSetup}>
                   <div>
                     <button onClick={toggleCoverageSetup}>{!showCoverageSetup ? "Show Coverage Setup ►" : "Hide Coverage Setup ▼"}</button>
@@ -404,7 +404,7 @@ export default function App() {
           token = {apiToken}
           results = {resultsNum} // Number of results to be returned
           dataset = {dataset} // Dataset name
-          applyCoverageMetric = {applyCoverage} // Coverage function that detects whole, concatenated or incomplete words.
+          applyCoverage = {coverage} // Coverage function that detects whole, concatenated or incomplete words.
           doTruncate = {doTruncate} // Set false if you want to always show results even when they are less likely to be relevant
           placeholderText = {placeholderText} // Placeholder for the input field
           dataSetDesc = {dataset} // Description title of the dataset in use
@@ -412,7 +412,7 @@ export default function App() {
           showMeta = {showMeta} // Set true if you want to display information about key and segment numbers
           removeDuplicates = {removeDuplicates} // Set false if you want to show multiple results with the same key.
           // CoverageSetup
-          lcsWordMinWordSize= {minWordSize} // Minimum word to be covered
+          MinWordSize = {minWordSize} // Minimum word to be covered
           coverWholeQuery = {coverWholeQuery} // Look for whole string query
           coverWholeWords = {coverWholeWords} // Cover whole isolated words
           coverFuzzyWords = {coverFuzzyWords} // Cover isolated words with a typo
