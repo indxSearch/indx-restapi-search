@@ -57,7 +57,7 @@ interface Record {
 
 
 const Search: React.FC<SearchProps> = ({
-  url = "https://api.indx.co/api/",
+  url = "https://restapi.indx.co/v33/api/",
   token = "",
   dataset = "undefined",
   results = 20,
@@ -123,7 +123,6 @@ const Search: React.FC<SearchProps> = ({
             minTruncationMatch: minTruncationMatch,
             truncationStrictness: truncationStrictness
           },
-          numberOfRecordsForAppliedAlgorithm: 500,
         }),
       });
 
@@ -132,7 +131,7 @@ const Search: React.FC<SearchProps> = ({
       if (data && data.searchRecords) {
         // Filter records where metricScore is above min threshold
         const filteredRecords = data.searchRecords.filter((record) => record.metricScore >= metricScoreMin);
-        setRecords(queryText.length > 1 ? filteredRecords : data.searchRecords);
+        setRecords(queryText.length > 1 && doTruncate ? filteredRecords : data.searchRecords);
         setTruncateIndex(doTruncate ? data.coverageBottomIndex ?? -1 : -1);
       } else {
         setRecords([]); // Reset to empty array if response is not as expected
