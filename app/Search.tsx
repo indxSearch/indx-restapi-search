@@ -2,7 +2,7 @@
 
 /*
 SEARCH for RestAPI
-For V3.3 with updated API
+For version 3.3
 
 See docs.indx.co to learn more.
 Go to auth.indx.co to register for a developer account
@@ -13,7 +13,7 @@ import styles from './Search.module.css';
 
 
 interface SearchProps {
-  url?: string; // Url to API. Default https://api.indx.co/api/
+  url?: string; // Url to API. Default https://restapi.indx.co/v33/api/
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
   dataset?: string; // Dataset name
