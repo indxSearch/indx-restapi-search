@@ -13,7 +13,7 @@ import styles from './Search.module.css';
 
 
 interface SearchProps {
-  url?: string; // Url to API. Default https://restapi.indx.co/v33/api/
+  url?: string; // Url to API.
   token?: string; // Formatted as Bearer + token. Retrieved when logging in.
   results?: number; // Number of results to be returned
   dataset?: string; // Dataset name
@@ -57,7 +57,7 @@ interface Record {
 
 
 const Search: React.FC<SearchProps> = ({
-  url = "https://restapi.indx.co/v33/api/",
+  url = "https://v33.indx.co/api/",
   token = "",
   dataset = "undefined",
   results = 20,

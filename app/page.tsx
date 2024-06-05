@@ -20,7 +20,7 @@ export default function App() {
   const [apiToken, setApiToken] = useState<string>("");
   const [loginStatus, setLoginStatus] = useState<string>("Not logged in");
   const [isLoggedin, setIsLoggedin] = useState<boolean>(false);
-  const [url, setUrl] = useState<string>('https://restapi.indx.co/v33/api/'); // Starting url
+  const [url, setUrl] = useState<string>('https://v33.indx.co/api/'); // Starting url
   const [usr, setUsr] = useState<string>(''); // Indx Auth username (e-mail)
   const [pw, setPw] = useState<string>(''); // Password
   const [datasetInfo, setDatasetInfo] = useState<DatasetInfo>([]);
